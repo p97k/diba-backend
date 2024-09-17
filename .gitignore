@@ -1,0 +1,29 @@
+# .gitignore
+
+# Virtual environment
+venv/
+env/
+.myenv/
+*.pyc
+__pycache__/
+db.sqlite3
+*.sqlite3
+
+# Django static and media files
+staticfiles/
+media/
+
+# Environment variables
+.env
+
+# Django migrations
+*/migrations/*
+
+# IDE settings
+.vscode/
+.idea/
+*.swp
+
+# Byte-compiled / optimized / DLL files
+*.py[cod]
+*$py.class
