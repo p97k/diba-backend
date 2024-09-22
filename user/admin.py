@@ -4,5 +4,5 @@ from django.contrib import admin
 
 @admin.register(Customer)
 class CustomerAdmin(admin.ModelAdmin):
-    list_display = ('id', 'email', 'name', 'last_name', 'is_active')
-    search_fields = ('email', 'name', 'last_name')
+    list_display = ('id', 'email', 'first_name', 'last_name', 'phone_number', 'is_active')
+    search_fields = ('email', 'first_name', 'last_name', 'phone_number')
