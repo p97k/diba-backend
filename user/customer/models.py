@@ -6,6 +6,7 @@ class Customer(models.Model):
     email = models.EmailField(unique=True, blank=False, null=False)
     first_name = models.CharField(max_length=255, blank=False)
     last_name = models.CharField(max_length=255, blank=False)
+    national_id = models.CharField(max_length=10, blank=False, default="")
     phone_number = models.CharField(max_length=255, blank=False, default="")
     postal_code = models.CharField(max_length=10, blank=False)
     address = models.CharField(max_length=255, blank=False)
