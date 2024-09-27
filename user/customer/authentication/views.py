@@ -4,7 +4,6 @@ from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import CustomerLoginSerializer
 
-
 class CustomerLoginView(APIView):
     def post(self, request):
         serializer = CustomerLoginSerializer(data=request.data)

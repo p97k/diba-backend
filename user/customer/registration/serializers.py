@@ -61,7 +61,7 @@ class CustomerSignUpSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         customer = Customer(
             email=validated_data['email'],
-            name=validated_data['name'],
+            first_name=validated_data['first_name'],
             last_name=validated_data['last_name'],
             national_id=validated_data['national_id'],
             phone_number=validated_data['phone_number'],
