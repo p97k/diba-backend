@@ -21,4 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('post/', include('post.urls')),
     path('user/', include('user.urls')),
+    path('dynamic-page/', include('dynamic_pages.urls')),
 ]
