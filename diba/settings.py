@@ -40,8 +40,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'user',
-    'post',
-    'dynamic_pages'
+    'dynamic_pages',
+    'reservation'
 ]
 
 REST_FRAMEWORK = {
