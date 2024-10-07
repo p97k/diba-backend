@@ -1,7 +1,6 @@
 from django.contrib import admin
 from .page.models import Page
 from .widget.models import Widget
-from django import forms
 
 from .widget.widget_factory import WidgetHandlerFactory
 
