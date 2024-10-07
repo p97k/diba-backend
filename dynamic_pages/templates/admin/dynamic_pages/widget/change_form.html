@@ -1,6 +1,45 @@
 {% extends "admin/change_form.html" %}
 
-{% block content %}
-  <h2>Widget Admin</h2>
-  {{ block.super }}
+{% block after_field_sets %}
+    {{ block.super }}
+
+    <div id="widget-specific-fields"></div>
+
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            const widgetTypeSelect = document.querySelector('select[name="type"]');
+            const widgetFieldsContainer = document.getElementById('widget-specific-fields');
+
+            const defaultFormFields = document.querySelectorAll('.form-row');
+            defaultFormFields.forEach(function (field) {
+                const label = field.querySelector('label');
+                if (label && label.getAttribute('for') !== 'id_type') {
+                    field.style.display = 'none';
+                }
+            });
+
+            function loadWidgetFields(widgetType) {
+                const urlMap = {
+                    'post': "{% url 'load_post_widget_fields' %}",
+                    'image': "{% url 'load_image_widget_fields' %}"
+                };
+
+                if (widgetType in urlMap) {
+                    fetch(urlMap[widgetType])
+                        .then(response => response.text())
+                        .then(html => {
+                            widgetFieldsContainer.innerHTML = html;
+                        });
+                } else {
+                    widgetFieldsContainer.innerHTML = '';
+                }
+            }
+
+            loadWidgetFields(widgetTypeSelect.value);
+
+            widgetTypeSelect.addEventListener('change', function () {
+                loadWidgetFields(widgetTypeSelect.value);
+            });
+        });
+    </script>
 {% endblock %}

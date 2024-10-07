@@ -3,7 +3,7 @@ from django.db import models
 class Widget(models.Model):
     WIDGET_TYPES = [
         ('post', 'Post'),
-        ('carousel', 'Carousel'),
+        ('image', 'Image'),
     ]
 
     type = models.CharField(max_length=50, choices=WIDGET_TYPES)

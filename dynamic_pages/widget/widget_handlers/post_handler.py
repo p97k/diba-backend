@@ -1,9 +1,14 @@
 from django import forms
+
+from utils.filter_widget_fields import filter_widget_fields
 from .base import BaseWidgetHandler
 from ..models import Widget
 
 
 class PostWidgetHandler(BaseWidgetHandler):
+    def __init__(self):
+        self.widget_type = 'post'
+
     class PostWidgetAdminForm(forms.ModelForm):
         title = forms.CharField(required=False, label="Title", widget=forms.TextInput(attrs={'class': 'vTextField'}))
         image_url = forms.CharField(required=False, label="Image URL", widget=forms.TextInput(attrs={'class': 'vTextField'}))
@@ -24,6 +29,7 @@ class PostWidgetHandler(BaseWidgetHandler):
 
         return form
 
+    @filter_widget_fields(['title', 'description', 'image_url'])
     def save_model(self, request, obj, form, change):
         title = form.cleaned_data.get('title')
         image_url = form.cleaned_data.get('image_url')
