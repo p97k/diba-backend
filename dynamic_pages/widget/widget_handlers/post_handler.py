@@ -6,6 +6,7 @@ from ..models import Widget
 class PostWidgetHandler(BaseWidgetHandler):
     class PostWidgetAdminForm(forms.ModelForm):
         title = forms.CharField(required=False, label="Title", widget=forms.TextInput(attrs={'class': 'vTextField'}))
+        image_url = forms.CharField(required=False, label="Image URL", widget=forms.TextInput(attrs={'class': 'vTextField'}))
         description = forms.CharField(required=False, label="Description", widget=forms.Textarea(attrs={'class': 'vLargeTextField'}))
 
         class Meta:
@@ -18,12 +19,14 @@ class PostWidgetHandler(BaseWidgetHandler):
         if obj and obj.config:
             post_config = obj.config.get('post', {})
             form.base_fields['title'].initial = post_config.get('title', '')
+            form.base_fields['image_url'].initial = post_config.get('image_url', '')
             form.base_fields['description'].initial = post_config.get('description', '')
 
         return form
 
     def save_model(self, request, obj, form, change):
         title = form.cleaned_data.get('title')
+        image_url = form.cleaned_data.get('image_url')
         description = form.cleaned_data.get('description')
 
         if obj.config is None:
@@ -32,6 +35,7 @@ class PostWidgetHandler(BaseWidgetHandler):
             obj.config['post'] = {}
 
         obj.config['post']['title'] = title
+        obj.config['post']['image_url'] = image_url
         obj.config['post']['description'] = description
 
         obj.save()
