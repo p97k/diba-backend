@@ -1,29 +1,21 @@
-ItemAction = {
-  init: function () {
-    this.$initWidgetTypeHandler();
-  },
-  $initWidgetTypeHandler: function () {
-    let object = $('.widget_type_select');
+$(function($) {
+    $(function() {
+        let sequence = $('#id_sequence'), verified = $('.HiddenSequence');
 
-    $handleWidgetTypes(object.val());
+        function toggleVerified(value, HiddenSeq) {
+            if (value !== '') {
+                HiddenSeq.show();
+            } else {
+                HiddenSeq.hide();
+            }
+        }
 
-    object.change(function () {
-      $handleWidgetTypes(this.value)
+        // show/hide on load based on pervious value of selectField
+        toggleVerified(sequence.val(), verified);
+
+        // show/hide on change
+        sequence.change(function() {
+            toggleVerified($(this).val(), verified);
+        });
     });
-
-    function $handleWidgetTypes($current_widget_id) {
-      $('.form-form_content').hide();
-      let $postWidget = $('.post_widget');
-
-      switch ($current_widget_id) {
-        case 'post':
-          $postWidget.show();
-          break;
-      }
-    }
-  }
-}
-
-$(function () {
-  ItemAction.init();
 });
