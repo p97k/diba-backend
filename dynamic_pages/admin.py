@@ -18,7 +18,7 @@ class WidgetAdmin(admin.ModelAdmin):
     exclude = ('config',)
 
     def get_form(self, request, obj=None, **kwargs):
-        widget_type = obj.type if obj else request.POST.get('type', None)
+        widget_type = obj.type if obj else "post"
         handler = WidgetHandlerFactory.get_handler(widget_type)
         return handler.get_form(request, obj, **kwargs)
 
