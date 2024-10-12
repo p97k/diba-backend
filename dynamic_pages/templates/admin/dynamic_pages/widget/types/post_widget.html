@@ -11,4 +11,11 @@
         <label for="id_description">Description:</label>
         <textarea name="description" class="vLargeTextField" id="id_description">{{ adminform.form.initial.config.post.description }}</textarea>
     </div>
+    <div class="form-row field-direction">
+    <label for="id_direction">Direction:</label>
+    <select name="direction" id="id_direction">
+        <option value="LTR" {% if direction == "LTR" %}selected{% endif %}>LTR</option>
+        <option value="RTL" {% if direction == "RTL" %}selected{% endif %}>RTL</option>
+    </select>
+</div>
 </div>

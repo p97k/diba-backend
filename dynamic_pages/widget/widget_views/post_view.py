@@ -6,6 +6,7 @@ class PostWidgetView(BaseWidgetView):
             'title': config['post']['title'],
             'description': config['post']['description'],
             'image_url': config['post']['image_url'],
+            'direction': config['post']['direction'],
         }
 
         return result
