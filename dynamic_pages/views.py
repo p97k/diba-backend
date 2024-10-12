@@ -2,6 +2,7 @@ from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
 from dynamic_pages.page.serializers import PageSerializer
 from dynamic_pages.page.models import Page
+from dynamic_pages.widget.widget_views.widget_view_factory import WidgetViewFactory
 from utils.response import CustomResponse
 from django.shortcuts import render
 
@@ -11,11 +12,17 @@ class DynamicPageView(APIView):
         serializer = PageSerializer(page)
         serializedData = serializer.data
 
+        preparedWidgets = []
+        for widget in serializedData['widgets']:
+            widgetView = WidgetViewFactory.get_view(widget['type'])
+            preparedData = widgetView.handle_widget_data(widget)
+            preparedWidgets.append(preparedData)
+
         result = {
             'id': serializedData['id'],
             'title' : serializedData['title'],
             'page_name' : serializedData['route'],
-            'widgets' : serializedData['widgets'],
+            'widgets' : preparedWidgets,
         }
 
         return CustomResponse.resolve(result)

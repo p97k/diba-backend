@@ -1,5 +1,5 @@
-from .widget_handlers.image_handler import ImageWidgetHandler
-from .widget_handlers.post_handler import PostWidgetHandler
+from dynamic_pages.widget.widget_handlers.image_handler import ImageWidgetHandler
+from dynamic_pages.widget.widget_handlers.post_handler import PostWidgetHandler
 
 class WidgetHandlerFactory:
     @staticmethod

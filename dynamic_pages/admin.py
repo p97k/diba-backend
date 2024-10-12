@@ -2,7 +2,7 @@ from django.contrib import admin
 from .page.models import Page
 from .widget.models import Widget
 
-from .widget.widget_factory import WidgetHandlerFactory
+from dynamic_pages.widget.widget_handlers.widget_handler_factory import WidgetHandlerFactory
 
 
 @admin.register(Page)
