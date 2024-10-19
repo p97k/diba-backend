@@ -9,12 +9,17 @@ class Consultant(models.Model):
         ('obstetrics', 'زنان و زایمان'),
     ]
 
+    GENDER_TYPES = [
+        ('man', 'آقا'),
+        ('woman', 'خانم'),
+    ]
+
     email = models.EmailField(unique=True, blank=False, null=False)
     first_name = models.CharField(max_length=255, blank=False)
     last_name = models.CharField(max_length=255, blank=False)
     national_id = models.CharField(max_length=10, blank=False)
     phone_number = models.CharField(max_length=255, blank=False)
-    gender = models.IntegerField(default=0)
+    gender = models.CharField(max_length=50, choices=GENDER_TYPES)
     service = models.CharField(max_length=50, choices=SERVICE_TYPES)
     password = models.CharField(max_length=255, blank=False)
     is_active = models.BooleanField(default=True)
