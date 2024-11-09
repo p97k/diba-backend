@@ -1,6 +1,5 @@
 from rest_framework import permissions
 from rest_framework.views import APIView
-
 from reservation.reservation_system.permissions import IsConsultant
 from reservation.serializers.time_slot_create_serializer import TimeSlotCreateSerializer
 from rest_framework import status
