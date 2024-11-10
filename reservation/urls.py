@@ -5,9 +5,9 @@ from reservation.reservation_system.views.create_time_slot import CreateTimeSlot
 from reservation.reservation_system.views.reservation import ReserveTimeSlotView
 
 urlpatterns = [
-    path('create-time-slot/', CreateTimeSlotView.as_view(), name='create-time-slot'),
-    path('consultants-by-service/', ConsultantListByServiceTypeView.as_view(), name='consultant-list-by-service-type'),
-    path('<int:consultant_id>/available-time-slots/', AvailableTimeSlotsView.as_view(),
+    path('v1/create-time-slot/', CreateTimeSlotView.as_view(), name='create-time-slot'),
+    path('v1/consultants-by-service/', ConsultantListByServiceTypeView.as_view(), name='consultant-list-by-service-type'),
+    path('v1/<int:consultant_id>/available-time-slots/', AvailableTimeSlotsView.as_view(),
          name='available-time-slots'),
-    path('reserve/', ReserveTimeSlotView.as_view(), name='reserve-time-slot'),
+    path('v1/reserve/', ReserveTimeSlotView.as_view(), name='reserve-time-slot'),
 ]
