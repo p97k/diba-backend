@@ -1,3 +1,4 @@
+from rest_framework import status
 from rest_framework.views import APIView
 from utils.response import CustomResponse
 from .serializers import CustomerSignUpSerializer
@@ -8,4 +9,4 @@ class CustomerSignUpView(APIView):
         if serializer.is_valid():
             serializer.save()
             return CustomResponse.resolve()
-        return CustomResponse.reject()
+        return CustomResponse.custom(status.HTTP_400_BAD_REQUEST, serializer.errors)

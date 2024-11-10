@@ -1,3 +1,4 @@
+from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -21,4 +22,4 @@ class CustomerLoginView(APIView):
 
             return CustomResponse.resolve(result)
 
-        return CustomResponse.reject()
+        return CustomResponse.custom(status.HTTP_400_BAD_REQUEST, serializer.errors)

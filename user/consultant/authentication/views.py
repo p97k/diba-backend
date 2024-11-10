@@ -1,11 +1,12 @@
+from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
-
 from utils.response import CustomResponse
 from .serializers import ConsultantLoginSerializer
 
 class ConsultantLoginView(APIView):
     def post(self, request):
+        print(request.data)
         serializer = ConsultantLoginSerializer(data=request.data)
         if serializer.is_valid():
             customer = serializer.validated_data
@@ -21,4 +22,4 @@ class ConsultantLoginView(APIView):
 
             return CustomResponse.resolve(result)
 
-        return CustomResponse.reject()
+        return CustomResponse.custom(status.HTTP_400_BAD_REQUEST, serializer.errors)

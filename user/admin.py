@@ -11,3 +11,9 @@ class CustomerAdmin(admin.ModelAdmin):
 class ConsultantAdmin(admin.ModelAdmin):
     list_display = ('id', 'email', 'first_name', 'last_name', 'phone_number', 'service', 'is_active')
     search_fields = ('email', 'first_name', 'last_name', 'phone_number', 'service', 'national_id')
+
+    def save_model(self, request, obj, form, change):
+        password = form.cleaned_data.get("password")
+        if password:
+            obj.set_password(password)
+        super().save_model(request, obj, form, change)
