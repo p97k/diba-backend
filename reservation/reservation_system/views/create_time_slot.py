@@ -7,11 +7,11 @@ from user.consultant.models import Consultant
 from utils.response import CustomResponse
 
 class CreateTimeSlotView(APIView):
-    permission_classes = [permissions.IsAuthenticated, IsConsultant]
+    # permission_classes = [permissions.IsAuthenticated, IsConsultant]
 
     def post(self, request):
         try:
-            consultant = Consultant.objects.get(user=request.user)
+            consultant = Consultant.objects.get(email=request.user.email)
         except Consultant.DoesNotExist:
             return CustomResponse.not_found()
 

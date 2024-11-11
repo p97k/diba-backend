@@ -16,7 +16,7 @@ class ConsultantListByServiceTypeView(APIView):
 
         consultants = Consultant.objects.all()
         if service_type:
-            consultants = consultants.filter(service_type=service_type)
+            consultants = consultants.filter(service=service_type)
 
         if not consultants.exists():
             return CustomResponse.not_found()

@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.hashers import make_password, check_password
 from django.utils import timezone
+from user.validators.validate_unique_user import validate_unique_email_and_username
+
 
 class Consultant(models.Model):
     SERVICE_TYPES = [
@@ -15,6 +17,7 @@ class Consultant(models.Model):
     ]
 
     email = models.EmailField(unique=True, blank=False, null=False)
+    username = models.CharField(max_length=255, unique=True, blank=True, null=True)
     first_name = models.CharField(max_length=255, blank=False)
     last_name = models.CharField(max_length=255, blank=False)
     national_id = models.CharField(max_length=10, blank=False)
@@ -31,6 +34,13 @@ class Consultant(models.Model):
 
     def check_password(self, raw_password):
         return check_password(raw_password, self.password)
+
+    def save(self, *args, **kwargs):
+        validate_unique_email_and_username(self.email, self.first_name)
+
+        if not self.username:
+            self.username = self.email
+        super(Consultant, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.email

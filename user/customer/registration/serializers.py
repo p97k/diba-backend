@@ -3,6 +3,9 @@ from rest_framework.validators import UniqueValidator
 from ..models import Customer
 import re
 
+from ...validators.validate_unique_user import validate_unique_email_and_username
+
+
 class CustomerSignUpSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(required=True, validators=[
         UniqueValidator(queryset=Customer.objects.all(), message="Email already exists")
@@ -56,6 +59,10 @@ class CustomerSignUpSerializer(serializers.ModelSerializer):
     def validate_phone_number(self, value):
         if not re.match(r"^09\d{9}$", value):
             raise serializers.ValidationError("Phone number must be exactly 11 digits and start with '09'")
+        return value
+
+    def validate(self, value):
+        validate_unique_email_and_username(value.get('email'), value.get('first_name'))
         return value
 
     def create(self, validated_data):
