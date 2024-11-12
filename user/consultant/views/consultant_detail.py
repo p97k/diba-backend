@@ -11,4 +11,14 @@ class ConsultantDetailView(generics.RetrieveAPIView):
     def get(self, request, *args, **kwargs):
         response = super().get(request, *args, **kwargs)
         consultant_data = response.data
-        return CustomResponse.resolve(consultant_data)
+
+        result = {
+            "id": consultant_data['id'],
+            "first_name": consultant_data['first_name'],
+            "last_name": consultant_data['last_name'],
+            "phone_number": consultant_data['phone_number'],
+            "gender": consultant_data['gender'],
+            "service": consultant_data['service'],
+        }
+
+        return CustomResponse.resolve(result)

@@ -9,4 +9,18 @@ class ConsultantListView(generics.ListAPIView):
 
     def list(self, request, *args, **kwargs):
         response = super().list(request, *args, **kwargs)
-        return CustomResponse.resolve(response.data)
+
+        result = []
+        for consultant in response.data:
+            result.append(
+                {
+                    "id": consultant["id"],
+                    "first_name": consultant['first_name'],
+                    "last_name": consultant['last_name'],
+                    "phone_number": consultant['phone_number'],
+                    "gender": consultant['gender'],
+                    "service": consultant['service'],
+                }
+            )
+
+        return CustomResponse.resolve(result)

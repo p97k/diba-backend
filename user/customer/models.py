@@ -6,6 +6,17 @@ from user.validators.validate_unique_user import validate_unique_email_and_usern
 
 
 class Customer(models.Model):
+
+    GENDER_TYPES = [
+        ('man', 'آقا'),
+        ('woman', 'خانم'),
+    ]
+
+    MARITAL_STATUSES = [
+        ('single', 'مجرد'),
+        ('married', 'متاهل'),
+    ]
+
     email = models.EmailField(unique=True, blank=False, null=False)
     username = models.CharField(max_length=255, unique=True, blank=True, null=True)
     first_name = models.CharField(max_length=255, blank=False)
@@ -15,8 +26,8 @@ class Customer(models.Model):
     postal_code = models.CharField(max_length=10, blank=False)
     address = models.CharField(max_length=255, blank=False)
     age = models.IntegerField(default=0)
-    gender = models.IntegerField(default=0)
-    marital_status = models.IntegerField(default=0)
+    gender = models.CharField(max_length=50, choices=GENDER_TYPES)
+    marital_status = models.CharField(max_length=50, choices=MARITAL_STATUSES)
     password = models.CharField(max_length=255, blank=False)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(default=timezone.now)
