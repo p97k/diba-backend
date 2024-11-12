@@ -22,7 +22,6 @@ class ConsultantLoginView(APIView):
                 result = {
                     'refresh_token': token_serializer.validated_data['refresh'],
                     'access_token': token_serializer.validated_data['access'],
-                    'user_type': token_serializer.validated_data['user_type'],
                     'message': "Login successful"
                 }
                 return CustomResponse.resolve(result)

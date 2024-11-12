@@ -1,56 +1,61 @@
 from rest_framework import serializers
-from datetime import datetime, timedelta
 from reservation.timeslot.models import TimeSlot
+from django.utils import timezone
 
-class TimeSlotCreateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TimeSlot
-        fields = ['consultant', 'start_time', 'end_time', 'is_available']
+class TimeSlotCreateSerializer(serializers.Serializer):
+    start_time = serializers.DateTimeField()
+    end_time = serializers.DateTimeField()
 
-    def validate(self, data):
+    def validate(self, attrs):
         """
-        Validate the time slot data
+        Validate that:
+        - start time is before the end time
+        - start time is not in the past
+        - no other time slot exists for the same consultant with overlapping times
         """
-        consultant = self.context['consultant']
+        start_time = attrs.get("start_time")
+        end_time = attrs.get("end_time")
+        consultant = self.context.get("consultant")
 
-        current_datetime = datetime.now()
-        selected_datetime = datetime.combine(data['date'], data['start_time'])
-
-        if selected_datetime <= current_datetime:
-            raise serializers.ValidationError("Time slot must be in the future.")
-
-        start_time = data['start_time']
-        end_time = data['end_time']
+        if start_time < timezone.now():
+            raise serializers.ValidationError("Start time cannot be in the past.")
 
         if start_time >= end_time:
-            raise serializers.ValidationError("Start time must be earlier than end time.")
+            raise serializers.ValidationError("Start time must be before end time.")
 
-        existing_slots = TimeSlot.objects.filter(
+        overlapping_slots = TimeSlot.objects.filter(
             consultant=consultant,
-            date=data['date']
-        ).filter(
+            is_available=True,
             start_time__lt=end_time,
             end_time__gt=start_time
         )
 
-        if existing_slots.exists():
-            raise serializers.ValidationError("Time slot overlaps with an existing slot.")
+        if overlapping_slots.exists():
+            raise serializers.ValidationError("This time slot overlaps with an existing time slot for this consultant.")
 
-        work_start = datetime.combine(data['date'], datetime.min.time()) + timedelta(hours=9)
-        work_end = datetime.combine(data['date'], datetime.min.time()) + timedelta(hours=18)
+        exact_match = TimeSlot.objects.filter(
+            consultant=consultant,
+            start_time=start_time,
+            end_time=end_time
+        ).exists()
 
-        if selected_datetime < work_start or selected_datetime > work_end:
-            raise serializers.ValidationError("Time slot must be within working hours (9 AM to 6 PM).")
+        if exact_match:
+            raise serializers.ValidationError("A time slot with the same start and end time already exists for this consultant.")
 
-        return data
+        return attrs
 
     def create(self, validated_data):
         """
-        Create the time slot with the associated consultant.
+        Create a new time slot for the consultant.
         """
-        consultant = self.context['consultant']
+        consultant = self.context.get("consultant")
+        start_time = validated_data.get("start_time")
+        end_time = validated_data.get("end_time")
+
         time_slot = TimeSlot.objects.create(
             consultant=consultant,
-            **validated_data
+            start_time=start_time,
+            end_time=end_time,
+            is_available=True
         )
         return time_slot
