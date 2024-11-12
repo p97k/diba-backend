@@ -12,7 +12,7 @@ class ReserveTimeSlotSerializer(serializers.Serializer):
         """
         try:
             time_slot = TimeSlot.objects.get(id=value)
-            if time_slot.reservation:
+            if time_slot.is_available is False:
                 raise serializers.ValidationError("This time slot has already been reserved.")
         except TimeSlot.DoesNotExist:
             raise serializers.ValidationError("The selected time slot does not exist.")

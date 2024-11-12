@@ -10,7 +10,7 @@ from user.customer.models import Customer
 from utils.response import CustomResponse
 
 class ReserveTimeSlotView(APIView):
-    permission_classes = [permissions.IsAuthenticated, IsCustomer]
+    # permission_classes = [permissions.IsAuthenticated, IsCustomer]
 
     def post(self, request):
         serializer = ReserveTimeSlotSerializer(data=request.data)
@@ -22,21 +22,24 @@ class ReserveTimeSlotView(APIView):
             try:
                 time_slot = TimeSlot.objects.get(id=time_slot_id, consultant__id=consultant_id)
 
-                if time_slot.reservation:
+                if time_slot.is_available is False:
                     return CustomResponse.custom(status.HTTP_400_BAD_REQUEST, "Time slot already reserved.")
 
-                customer = Customer.objects.get(user=request.user)
+                customer = Customer.objects.get(email=self.request.user)
+
+                time_slot.is_available = False
+                time_slot.save()
 
                 reservation = Reservation.objects.create(
                     customer=customer,
-                    time_slot=time_slot
+                    time_slot=time_slot,
                 )
 
                 return CustomResponse.resolve({
                     "message": "Reservation successful.",
                     "reservation_id": reservation.id,
                     "time_slot": {
-                        "date": time_slot.date,
+                        "reserved_consultant": time_slot.consultant.email,
                         "start_time": time_slot.start_time,
                         "end_time": time_slot.end_time
                     }
