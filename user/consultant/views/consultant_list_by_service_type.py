@@ -1,13 +1,10 @@
 from rest_framework.views import APIView
-from rest_framework import permissions, status
-from reservation.reservation_system.permissions import IsCustomer
+from rest_framework import status
 from user.consultant.models import Consultant
 from user.consultant.serializers import ConsultantSerializer
 from utils.response import CustomResponse
 
 class ConsultantListByServiceTypeView(APIView):
-    permission_classes = [permissions.IsAuthenticated, IsCustomer]
-
     def get(self, request):
         service_type = request.query_params.get('service_type')
 
